@@ -326,8 +326,8 @@ function hideTipHandle() {
         </div>
         <el-alert v-if="noticeMessage" title="Notice" :description="noticeMessage" type="warning" effect="dark" show-icon class="mb-3" />
         <el-row style="margin-top: 12px">
-          <el-col :span="24" :md="12">
-            <el-row>
+          <el-col :span="24" :md="14">
+            <el-row :span="24">
               <el-col>
                 <div class="selectToken">
                   <div class="flex items-center">
@@ -358,7 +358,7 @@ function hideTipHandle() {
                       <el-button :loading="isBalanceLoading" :icon="Refresh" circle @click="getBalance(address)" />
                       <!-- 生成环境需增加禁用属性 :disabled="!!noticeMessage" -->
                       <el-button type="primary" :disabled="!!noticeMessage" @click="showSwapDialog = true">Swap</el-button>
-                      <el-button type="warning" :disabled="!!noticeMessage" @click="showCtrlPoolDialog = true">+ Add liquidity</el-button>
+                      <el-button type="warning" :disabled="!!noticeMessage" @click="showCtrlPoolDialog = true">+ Add Liquidity</el-button>
                     </div>
                   </template>
                   <div class="inline-block" style="font-size: 14px" v-else-if="currentPool.pooladdress && !address">
@@ -367,13 +367,6 @@ function hideTipHandle() {
                 </div>
               </el-col>
             </el-row>
-            <!-- <el-row class="mt-2">
-              <div>
-                <el-badge :value="transferLoadingCount" :hidden="!transferLoadingCount" v-if="address">
-                  <DogTableMenuItem class="mr-3" style="line-height: 30px; padding: 0 10px" label="History" value="1" @click="showTransferDialog = true" />
-                </el-badge>
-              </div>
-            </el-row> -->
             <el-row class="mt-5" v-if="currentPoolState">
               <el-col :span="12" class="mb-2">
                 <h4 style="font-size: 26px; margin: 0"><span style="margin-right: 6px; font-size: 30px">Ð</span>{{ np.round(showPriceVal, 6) }}</h4>
@@ -398,7 +391,7 @@ function hideTipHandle() {
               </el-col>
             </el-row>
           </el-col>
-          <el-col :span="24" :md="12">
+          <el-col :span="24" :md="10">
             <v-chart ref="vchart" class="chart" autoresize @hideTip="hideTipHandle" />
           </el-col>
         </el-row>
@@ -408,7 +401,6 @@ function hideTipHandle() {
       <dog-card v-loading="listLoading">
         <div style="position: absolute; z-index: 2000">
           <DogTableMenuItem label="Pool Transactions" :value="0" @click="transferSelect.value = 0" :selected="transferSelect.value == 0" />
-          <!-- <DogTableMenuItem label="Query" :value="3" @click="transferSelect.value = 3" :selected="transferSelect.value == 3" /> -->
           <DogTableMenuItem label="Holder" :value="1" @click="getHolderData" :selected="transferSelect.value == 1" />
           <DogTableMenuItem label="Info" :value="2" @click="getTokenInfoHandle" :selected="transferSelect.value == 2" />
         </div>
@@ -416,7 +408,6 @@ function hideTipHandle() {
           <TransferTable v-show="transferSelect.value == 0" :current-pool="currentPool as SwordPool"></TransferTable>
           <TransferTop500 ref="TransferTop500Ref" v-show="transferSelect.value == 1" :current-pool="currentPool as SwordPool"></TransferTop500>
           <Info style="margin-top: 45px" v-show="transferSelect.value == 2" :token-info="tokenInfo"></Info>
-          <!-- <QueryAddress v-show="transferSelect.value == 3" :current-pool="currentPool as SwordPool"></QueryAddress> -->
         </div>
       </dog-card>
     </el-col>
@@ -448,7 +439,8 @@ function hideTipHandle() {
 .selectToken {
   display: flex;
   align-items: center;
-  @media screen and (max-width: 490px) {
+  white-space: nowrap;
+  @media screen and (max-width: 650px) {
     flex-wrap: wrap;
     & .swap-pair_buy--connect,
     & &_bar {
