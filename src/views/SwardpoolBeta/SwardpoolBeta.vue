@@ -358,7 +358,7 @@ function hideTipHandle() {
                       <el-button :loading="isBalanceLoading" :icon="Refresh" circle @click="getBalance(address)" />
                       <!-- 生成环境需增加禁用属性 :disabled="!!noticeMessage" -->
                       <el-button type="primary" :disabled="!!noticeMessage" @click="showSwapDialog = true">Swap</el-button>
-                      <el-button type="warning" :disabled="!!noticeMessage" @click="showCtrlPoolDialog = true">+ Add Liquidity</el-button>
+                      <el-button type="warning" :disabled="!!noticeMessage" @click="showCtrlPoolDialog = true">+ Add liquidity</el-button>
                     </div>
                   </template>
                   <div class="inline-block" style="font-size: 14px" v-else-if="currentPool.pooladdress && !address">
