@@ -4,7 +4,7 @@ import TransferTable from './components/TransferTable'
 import np from 'number-precision'
 import { useAppStore } from '@/store'
 import { ElMessageBox } from 'element-plus'
-import { ArrowDown, Refresh } from '@element-plus/icons-vue'
+import { ArrowDown, Clock, Refresh } from '@element-plus/icons-vue'
 import SwapDialog from './components/SwapDialog.vue'
 import icons from '@/config/payIcons'
 import SwapTransferList from './components/SwapTransferList.vue'
@@ -13,6 +13,7 @@ import { SwordPool, TokenState } from '@/services/types'
 import VChart from 'vue-echarts'
 import ECharts from 'vue-echarts'
 import { TokenMarketInfo } from '@/types'
+import { numberFormat } from '@/utils'
 
 defineOptions({
   name: 'swap',
@@ -34,6 +35,7 @@ const listLoading = ref(false)
 const balance = ref(0)
 const tabValue = ref('0')
 const showTransferDialog = ref(false)
+const showCtrlPoolDialog = ref(false)
 const isBalanceLoading = ref(false)
 const transferSelectList = [
   { label: 'Pool Transactions', value: 0 },
@@ -328,31 +330,35 @@ function hideTipHandle() {
             <el-row>
               <el-col>
                 <div class="selectToken">
-                  <el-dropdown class="inline-block mr-4" trigger="click" @command="changePool">
-                    <el-button>
-                      <img class="token-icon" v-if="currentPool.tokenA && icons[currentPool.tokenA]" :src="icons[currentPool.tokenA]" alt="" />{{ currentPool?.tokenA
-                      }}<span class="split-word">/</span> <img class="token-icon" v-if="currentPool.tokenB && icons[currentPool.tokenB]" :src="icons[currentPool.tokenB]" alt="" /><span v-if="address"
-                        >{{ balance }}&nbsp;</span
-                      >{{ currentPool?.tokenB }}
-                      <el-icon class="ml-2"><ArrowDown /></el-icon>
-                    </el-button>
-                    <template #dropdown>
-                      <el-dropdown-menu>
-                        <el-dropdown-item v-for="item in pools" :key="item.poolid" :command="item.poolid" :disabled="!!noticeMessage || item.status != 0">
-                          <img class="token-icon" v-if="icons[item.tokenA]" :src="icons[item.tokenA]" alt="" />{{ item?.tokenA }}<span class="split-word">/</span>
-                          <img class="token-icon" v-if="icons[item.tokenB]" :src="icons[item.tokenB]" alt="" />{{ item?.tokenB }}
-                        </el-dropdown-item>
-                      </el-dropdown-menu>
-                    </template>
-                  </el-dropdown>
+                  <div class="flex items-center">
+                    <el-dropdown class="inline-block mr-2" trigger="click" @command="changePool">
+                      <el-button>
+                        <img class="token-icon" v-if="currentPool.tokenA && icons[currentPool.tokenA]" :src="icons[currentPool.tokenA]" alt="" />{{ currentPool?.tokenA
+                        }}<span class="split-word">/</span> <img class="token-icon" v-if="currentPool.tokenB && icons[currentPool.tokenB]" :src="icons[currentPool.tokenB]" alt="" /><span
+                          v-if="address"
+                          >{{ numberFormat(balance) }}&nbsp;</span
+                        >{{ currentPool?.tokenB }}
+                        <el-icon class="mx-2"><ArrowDown /></el-icon>
+                      </el-button>
+                      <template #dropdown>
+                        <el-dropdown-menu>
+                          <el-dropdown-item v-for="item in pools" :key="item.poolid" :command="item.poolid" :disabled="!!noticeMessage || item.status != 0">
+                            <img class="token-icon" v-if="icons[item.tokenA]" :src="icons[item.tokenA]" alt="" />{{ item?.tokenA }}<span class="split-word">/</span>
+                            <img class="token-icon" v-if="icons[item.tokenB]" :src="icons[item.tokenB]" alt="" />{{ item?.tokenB }}
+                          </el-dropdown-item>
+                        </el-dropdown-menu>
+                      </template>
+                    </el-dropdown>
+                    <el-badge style="font-size: 0" class="mr-2" :value="transferLoadingCount" :hidden="!transferLoadingCount" v-if="address">
+                      <el-icon style="color: #666; font-size: 24px; cursor: pointer" @click="showTransferDialog = true"><Clock /></el-icon>
+                    </el-badge>
+                  </div>
                   <template v-if="address && currentPool.pooladdress">
-                    <el-button class="mr-3" :loading="isBalanceLoading" :icon="Refresh" circle @click="getBalance(address)" />
                     <div class="selectToken_bar">
+                      <el-button :loading="isBalanceLoading" :icon="Refresh" circle @click="getBalance(address)" />
                       <!-- 生成环境需增加禁用属性 :disabled="!!noticeMessage" -->
-                      <el-button class="mr-3" type="primary" :disabled="!!noticeMessage" @click="showSwapDialog = true">Swap</el-button>
-                      <el-badge :value="transferLoadingCount" :hidden="!transferLoadingCount" v-if="address">
-                        <DogTableMenuItem style="margin-right: 0; line-height: 30px; padding: 0 10px" label="History" value="1" @click="showTransferDialog = true" />
-                      </el-badge>
+                      <el-button type="primary" :disabled="!!noticeMessage" @click="showSwapDialog = true">Swap</el-button>
+                      <el-button type="warning" :disabled="!!noticeMessage" @click="showCtrlPoolDialog = true">+ Add Liquidity</el-button>
                     </div>
                   </template>
                   <div class="inline-block" style="font-size: 14px" v-else-if="currentPool.pooladdress && !address">
@@ -361,10 +367,17 @@ function hideTipHandle() {
                 </div>
               </el-col>
             </el-row>
-            <el-row style="margin: 24px 0" v-if="currentPoolState">
-              <el-col :span="12">
+            <!-- <el-row class="mt-2">
+              <div>
+                <el-badge :value="transferLoadingCount" :hidden="!transferLoadingCount" v-if="address">
+                  <DogTableMenuItem class="mr-3" style="line-height: 30px; padding: 0 10px" label="History" value="1" @click="showTransferDialog = true" />
+                </el-badge>
+              </div>
+            </el-row> -->
+            <el-row class="mt-5" v-if="currentPoolState">
+              <el-col :span="12" class="mb-2">
                 <h4 style="font-size: 26px; margin: 0"><span style="margin-right: 6px; font-size: 30px">Ð</span>{{ np.round(showPriceVal, 6) }}</h4>
-                <p style="font-size: 16px; color: #777; vertical-align: middle">
+                <p class="m-0 mt-2" style="font-size: 16px; color: #777; vertical-align: middle">
                   <span style="margin-right: 4px">{{ Math.abs(np.round(showUpdownVal * 100, 2)) }}%</span>
                   <svg v-show="showUpdownVal >= 0" style="vertical-align: middle" width="18" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
                     <path d="M573.056 272l308.8 404.608A76.8 76.8 0 0 1 820.736 800H203.232a76.8 76.8 0 0 1-61.056-123.392L450.976 272a76.8 76.8 0 0 1 122.08 0z" fill="rgb(64, 180, 105)" />
@@ -374,18 +387,15 @@ function hideTipHandle() {
                   </svg>
                 </p>
               </el-col>
-              <el-col :span="12">
+              <el-col :span="12" class="flex items-end mb-2">
                 <el-statistic title="Processed Blocks" :value="currentPoolState?.blockno" />
               </el-col>
-              <el-col :span="12">
+              <el-col :span="12" class="mb-2">
                 <el-statistic :title="`Current ${currentPool?.tokenA} Balance`" :precision="5" :value="currentPoolState?.balanceA" />
               </el-col>
-              <el-col :span="12">
+              <el-col :span="12" class="mb-2">
                 <el-statistic :title="`Current ${currentPool?.tokenB} Balance`" :precision="5" :value="currentPoolState?.balanceB" />
               </el-col>
-              <!-- <el-col :span="12">
-                <el-statistic title="Price" :precision="6" :value="np.divide(currentPoolState?.balanceA || 0, currentPoolState?.balanceB || 0) || 0" />
-              </el-col> -->
             </el-row>
           </el-col>
           <el-col :span="24" :md="12">
@@ -440,6 +450,7 @@ function hideTipHandle() {
     @pay-success="paySuccess"
   />
   <SwapTransferList v-model:visible="showTransferDialog" :current-pool="currentPool" @close="tabValue = '0'"></SwapTransferList>
+  <SwapCtrlPoolDialog v-model:visible="showCtrlPoolDialog" :current-pool="currentPool"></SwapCtrlPoolDialog>
 </template>
 <style lang="scss" scoped>
 :deep(.el-statistic__number) {
