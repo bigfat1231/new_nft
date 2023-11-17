@@ -160,8 +160,13 @@ export default defineComponent({
 
     const balance = ref(0)
 
+    const controller = ref()
     async function getBanlance() {
-      const res = await getBalanceByPoolAddress(params.address)
+      controller.value?.abort()
+      controller.value = new AbortController()
+      const res = await getBalanceByPoolAddress(params.address, {
+        signal: controller.value.signal,
+      })
       const data = res.data
       if (data.length) {
         balance.value = data[0]?.balance || 0
@@ -185,6 +190,7 @@ export default defineComponent({
             onClear={() => {
               params.address = ''
               balance.value = 0
+              controller.value?.abort()
               query(1, true)
             }}
           ></DogSearch>

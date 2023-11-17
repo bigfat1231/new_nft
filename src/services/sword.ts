@@ -72,9 +72,10 @@ export const queryTransferStatus = (hash: string) => {
  * @param hash
  * @returns
  */
-export const getBalanceByPoolAddress = (address: string) => {
+export const getBalanceByPoolAddress = (address: string, options = {}) => {
   return axios.get('https://py7xjcgpe9.execute-api.ap-east-1.amazonaws.com/beta/api/balance', {
     params: { address },
+    ...options,
   })
 }
 
