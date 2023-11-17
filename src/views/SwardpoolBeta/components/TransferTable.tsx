@@ -3,10 +3,11 @@ import DogLink from '@/components/DogLink.vue'
 import SwapIconExchange from '@/components/SwapIconExchange.vue'
 import SwapStatusIcon from '@/components/SwapStatusIcon.vue'
 import DogSearch from '@/components/DogSearch.vue'
-import { queryPoolTransfers } from '@/services/sword'
+import { getBalanceByPoolAddress, queryPoolTransfers } from '@/services/sword'
 import { PropType } from 'vue'
 import { numberFormat } from '@/utils'
 import { SwordPool } from '@/services/types'
+import icon from '@/config/payIcons'
 
 export const StatusType = {
   0: 'pending',
@@ -157,20 +158,43 @@ export default defineComponent({
           }
     }
 
+    const balance = ref(0)
+
+    async function getBanlance() {
+      const res = await getBalanceByPoolAddress(params.address)
+      const data = res.data
+      if (data.length) {
+        balance.value = data[0]?.balance || 0
+      } else {
+        balance.value = 0
+      }
+    }
+
     return () => (
       <div class="relative mt-12">
-        <DogSearch
-          class="absolute"
-          v-model={params.address}
-          loading={loading.value}
-          onSearch={() => {
-            query(1, true)
-          }}
-          onClear={() => {
-            params.address = ''
-            query(1, true)
-          }}
-        ></DogSearch>
+        <div class="flex absolute w-full box-border pr-10">
+          <DogSearch
+            class="flex-1"
+            style="max-width: 300px"
+            v-model={params.address}
+            loading={loading.value}
+            onSearch={() => {
+              query(1, true)
+              getBanlance()
+            }}
+            onClear={() => {
+              params.address = ''
+              balance.value = 0
+              query(1, true)
+            }}
+          ></DogSearch>
+          {balance.value > 0 && (
+            <div class="flex items-center ml-3 text-xs">
+              <img class="mr-2" style={{ borderRadius: '50%', width: '16px' }} src={icon.dogim} alt="" />
+              {numberFormat(balance.value)}
+            </div>
+          )}
+        </div>
         <DogTable
           defaultPageSize={20}
           rowkey="id"

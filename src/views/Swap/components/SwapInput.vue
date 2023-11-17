@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import icons from '@/config/payIcons'
 import { TokenSwapInfo, TokenInputName } from '@/services/types'
+import { CaretRight } from '@element-plus/icons-vue'
 
 const props = withDefaults(
   defineProps<{
@@ -62,9 +63,11 @@ function changePool(poolid: string) {
 
 <template>
   <div class="swap-pair_item">
-    <div style="display: flex; justify-content: space-between">
+    <div style="display: flex; justify-content: space-between; height: 1em">
       <span class="swap-pair_item_title">{{ props.title }}</span>
-      <div class="swap-pair_select" v-if="props.swapType == 'SWAP_B_A' && props.name == 'pay'" @click="emit('selectToken')">Select></div>
+      <div class="swap-pair_select flex items-center" v-if="props.swapType == 'SWAP_B_A' && props.name == 'pay'" @click="emit('selectToken')">
+        Select<el-icon><CaretRight /></el-icon>
+      </div>
     </div>
     <section class="swap-pair_main">
       <div class="swap-pair_inputwrap">
@@ -86,7 +89,7 @@ function changePool(poolid: string) {
         <el-dropdown trigger="click" :disabled="props.loading" @command="changePool" @visible-change="(isVisible: any) => isVisible && emit('focus')" v-if="props.pools.length && currentPool">
           <div class="swap-pair_token">
             <img class="token-icon" v-if="currentPool?.tokenB && icons[currentPool.tokenB]" :src="icons[currentPool.tokenB]" alt="" />{{ currentPool?.tokenB
-            }}<span class="nft" style="font-size: 12px">&#xeb6d;</span>
+            }}<span class="nft ml-1" style="font-size: 12px">&#xeb6d;</span>
           </div>
           <template #dropdown>
             <el-dropdown-menu>
@@ -106,16 +109,19 @@ function changePool(poolid: string) {
 .swap-pair {
   &_item {
     padding: 12px;
-    border: 1px solid #b7b7b7;
+    border: 1px solid #ccc;
+    // box-shadow: 0px 0px 6px 1px#fff;
     border-radius: 10px;
     background-color: #fff;
   }
   &_item_title {
     font-size: 13px;
+    vertical-align: middle;
   }
   &_select {
     color: #333;
     cursor: pointer;
+    vertical-align: middle;
     &:hover {
       color: #ffa21e;
     }
@@ -152,9 +158,12 @@ function changePool(poolid: string) {
   &_token {
     display: flex;
     align-items: center;
-    border: 1px solid #333;
-    padding: 4px 8px;
-    border-radius: 15px;
+    color: #333;
+    // border: 1px solid #ccc;
+    border: 1px solid #e9e9e9;
+    // background-image: linear-gradient(to right, #fff 0%, #ffbb00 80%);
+    padding: 8px 12px;
+    border-radius: 18px;
     font-size: 14px;
     cursor: pointer;
     outline: 0;

@@ -9,7 +9,7 @@ const curTabValue = ref<AssetsType>(type)
 const loading = ref(false)
 const tabs = [
   {
-    label: 'X20',
+    label: 'DRC',
     value: 'token',
   },
   {

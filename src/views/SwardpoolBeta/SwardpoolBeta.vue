@@ -400,25 +400,6 @@ function hideTipHandle() {
           </el-col>
           <el-col :span="24" :md="12">
             <v-chart ref="vchart" class="chart" autoresize @hideTip="hideTipHandle" />
-            <!-- <div class="flex justify-center">
-              <el-dropdown placement="top">
-                <div class="cursor-pointer outline-none">
-                  <span style="color: rgb(238, 181, 15)">{{ currentPool?.pooladdress }}</span>
-                  <el-icon class="ml-1" @click="toClipboard(currentPool.pooladdress!)">
-                    <CopyDocument />
-                  </el-icon>
-                </div>
-                <template #dropdown>
-                  <div class="flex flex-col items-center p-5">
-                    <DogLink class="cursor-pointer" style="font-size: 14px" disabledTooltip is-copy :label="currentPool?.pooladdress" :value="currentPool?.pooladdress"></
-                      DogLink>
-                    <div style="border: 2px solid rgb(238, 181, 15); padding: 12px; border-radius: 24px">
-                      <qrcode-vue :value="currentPool?.pooladdress" :size="150" level="H" />
-                    </div>
-                  </div>
-                </template>
-              </el-dropdown>
-            </div> -->
           </el-col>
         </el-row>
       </dog-card>
@@ -427,7 +408,7 @@ function hideTipHandle() {
       <dog-card v-loading="listLoading">
         <div style="position: absolute; z-index: 2000">
           <DogTableMenuItem label="Pool Transactions" :value="0" @click="transferSelect.value = 0" :selected="transferSelect.value == 0" />
-          <DogTableMenuItem label="Query" :value="3" @click="transferSelect.value = 3" :selected="transferSelect.value == 3" />
+          <!-- <DogTableMenuItem label="Query" :value="3" @click="transferSelect.value = 3" :selected="transferSelect.value == 3" /> -->
           <DogTableMenuItem label="Holder" :value="1" @click="getHolderData" :selected="transferSelect.value == 1" />
           <DogTableMenuItem label="Info" :value="2" @click="getTokenInfoHandle" :selected="transferSelect.value == 2" />
         </div>
@@ -435,7 +416,7 @@ function hideTipHandle() {
           <TransferTable v-show="transferSelect.value == 0" :current-pool="currentPool as SwordPool"></TransferTable>
           <TransferTop500 ref="TransferTop500Ref" v-show="transferSelect.value == 1" :current-pool="currentPool as SwordPool"></TransferTop500>
           <Info style="margin-top: 45px" v-show="transferSelect.value == 2" :token-info="tokenInfo"></Info>
-          <QueryAddress v-show="transferSelect.value == 3" :current-pool="currentPool as SwordPool"></QueryAddress>
+          <!-- <QueryAddress v-show="transferSelect.value == 3" :current-pool="currentPool as SwordPool"></QueryAddress> -->
         </div>
       </dog-card>
     </el-col>
