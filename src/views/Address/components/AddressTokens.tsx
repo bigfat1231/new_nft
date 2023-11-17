@@ -1,7 +1,6 @@
 import DogLink from '@/components/DogLink.vue'
 import DogTable from '@/components/DogTable/DogTable'
-import { ElImage } from 'element-plus'
-import { getTransferList } from '@/services/sword'
+import { getBalanceByPoolAddress } from '@/services/sword'
 import icon from '@/config/payIcons'
 
 export default defineComponent({
@@ -31,35 +30,38 @@ export default defineComponent({
 
     const columns = [
       {
-        title: 'token',
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        render() {
-          return <ElImage v-slots={{ error: () => <div class="el-image__error">dogim</div> }} style="width: 40px; height: 40px; border-radius: 5px" src={icon.dogim} fit="cover"></ElImage>
+        title: 'Address',
+        dataIndex: 'address',
+        render(text: string) {
+          return <>{text && <DogLink route is-copy label={text} value={text}></DogLink>}</>
         },
       },
       {
-        title: 'Txid',
-        dataIndex: 'txid',
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        render(text: string, r: any) {
-          return <>{text && <DogLink route is-copy to={`/tokens/${props.address}/${r.txid}`} label={omitCenterString(text, 24)} value={text}></DogLink>}</>
-        },
-      },
-      {
-        title: 'amount',
-        dataIndex: 'amt',
+        title: 'Balance',
+        dataIndex: 'balance',
         render(amt: number) {
-          return numberFormat(amt)
+          return (
+            <div class="flex items-center">
+              {numberFormat(amt)}
+              <img class="ml-2" style={{ borderRadius: '50%', width: '24px' }} src={icon.dogim} alt="" />
+            </div>
+          )
         },
       },
     ]
 
     async function getData() {
       try {
-        const res = await getTransferList(props.address)
+        const res = await getBalanceByPoolAddress(props.address)
+        const data = res.data
+
+        if (data.length && !+data[0].balance) {
+          data.shift()
+        }
+
         return {
-          total: res.data.total || 1,
-          data: res.data.data.transfer_list,
+          total: 1,
+          data,
         }
       } catch (e: unknown) {
         props.error?.(e as Error)

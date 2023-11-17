@@ -60,6 +60,10 @@ export default defineComponent({
       type: Boolean,
       default: true,
     },
+    disabledSlide: {
+      type: Boolean,
+      default: false,
+    },
   },
   emits: ['current-change', 'row-click', 'refresh'],
   setup(props, { emit }) {
@@ -71,7 +75,7 @@ export default defineComponent({
     watch(
       () => props.loading,
       (loading) => {
-        if (!loading && actionType.value == ActionType.Pagination) {
+        if (!loading && actionType.value == ActionType.Pagination && !props.disabledSlide) {
           resetPositionTop()
         }
       }

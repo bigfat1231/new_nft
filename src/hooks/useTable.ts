@@ -20,9 +20,11 @@ export function useTable(options: TableHookOptions) {
   const dataSource = ref<any>([])
   const page = ref(1)
   const total = ref(0)
+  const disabledSlide = ref(false)
 
-  async function query(p: number) {
+  async function query(p: number, disSlide = false) {
     loading.value = true
+    disabledSlide.value = disSlide
     try {
       const result = await api(p, pageSize)
       const { total: tol, data } = result
@@ -32,6 +34,9 @@ export function useTable(options: TableHookOptions) {
       return result
     } finally {
       loading.value = false
+      nextTick(() => {
+        disabledSlide.value = false
+      })
     }
   }
 
@@ -41,7 +46,7 @@ export function useTable(options: TableHookOptions) {
 
   onMounted(() => {
     if (first) {
-      query(page.value)
+      query(page.value, true)
     }
   })
 
@@ -52,5 +57,6 @@ export function useTable(options: TableHookOptions) {
     total,
     query,
     refresh,
+    disabledSlide,
   }
 }

@@ -5,6 +5,7 @@ import { getBalanceByPoolAddress } from '@/services/sword'
 import { PropType } from 'vue'
 import { numberFormat } from '@/utils'
 import { SwordPool } from '@/services/types'
+import icon from '@/config/payIcons'
 
 export default defineComponent({
   props: {
@@ -13,7 +14,7 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const { loading, dataSource, total, page, query } = useTable({
+    const { loading, dataSource, total, page, query, disabledSlide } = useTable({
       first: false,
       api: getData,
       pageSize: 20,
@@ -35,7 +36,12 @@ export default defineComponent({
         title: 'Balance',
         dataIndex: 'balance',
         render(balance: number) {
-          return `${numberFormat(balance)}`
+          return (
+            <div class="flex items-center">
+              {numberFormat(balance)}
+              <img class="ml-2" style={{ borderRadius: '50%', width: '24px' }} src={icon.dogim} alt="" />
+            </div>
+          )
         },
       },
     ]
@@ -52,9 +58,14 @@ export default defineComponent({
     async function getData() {
       const res = await getBalanceByPoolAddress(params.address)
       const data = res.data
+
+      if (data.length && !+data[0].balance) {
+        data.shift()
+      }
+
       return data.length
         ? {
-            total: data.total || 1,
+            total: 1,
             data,
           }
         : {
@@ -70,17 +81,18 @@ export default defineComponent({
           v-model={params.address}
           loading={loading.value}
           onSearch={() => {
-            query(1)
+            query(1, true)
           }}
           onClear={() => {
             params.address = ''
-            query(1)
+            query(1, true)
           }}
         ></DogSearch>
         <DogTable
           defaultPageSize={20}
           rowkey="id"
           loading={loading.value}
+          disabledSlide={disabledSlide.value}
           dataSource={dataSource.value}
           columns={columns.value}
           total={total.value}

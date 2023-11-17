@@ -37,7 +37,7 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const { loading, dataSource, total, page, query } = useTable({
+    const { loading, dataSource, total, page, query, disabledSlide } = useTable({
       first: false,
       api: getData,
       pageSize: 20,
@@ -164,11 +164,11 @@ export default defineComponent({
           v-model={params.address}
           loading={loading.value}
           onSearch={() => {
-            query(1)
+            query(1, true)
           }}
           onClear={() => {
             params.address = ''
-            query(1)
+            query(1, true)
           }}
         ></DogSearch>
         <DogTable
@@ -181,6 +181,7 @@ export default defineComponent({
           currentPage={page.value}
           onCurrent-change={query}
           onRefresh={() => query(page.value)}
+          disabledSlide={disabledSlide.value}
         />
       </div>
     )
