@@ -1,11 +1,14 @@
 <script setup lang="ts">
 const props = withDefaults(
   defineProps<{
-    type?: 'default' | 'wran' | 'primary' | 'success' | 'info'
+    type?: 'default' | 'warn' | 'primary' | 'success' | 'info'
     disabled?: boolean
+    border?: boolean
+    borderColor?: string
   }>(),
   {
     type: 'default',
+    border: true,
   }
 )
 
@@ -15,7 +18,12 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <div class="doge-button" :class="[`doge-button--${props.type}`]" @click="emit('click')">
+  <div
+    class="doge-button"
+    :class="[`doge-button--${props.type}`]"
+    :style="[!props.border ? { border: 'none' } : {}, props.borderColor ? { borderColor: props.borderColor } : {}]"
+    @click="emit('click')"
+  >
     <slot></slot>
   </div>
 </template>
@@ -26,7 +34,7 @@ const emit = defineEmits<{
   padding: 4px 10px 5px 8px;
   border-radius: 8px;
   box-shadow: inset 0 -4px 0 0 rgba(0, 0, 0, 0.1);
-  border: solid 1px #000;
+  border: solid 1px #333;
   background-color: #fafafa;
   font-size: 14px;
   margin-left: 12px;
@@ -35,7 +43,7 @@ const emit = defineEmits<{
   &--default:hover {
     background-color: #ddc2f9;
   }
-  &--wran {
+  &--warn {
     background-color: orange;
     color: #fff;
     &:hover {

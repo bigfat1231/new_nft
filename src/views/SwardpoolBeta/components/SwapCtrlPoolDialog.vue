@@ -93,7 +93,7 @@ function changeUndo(isAdd: boolean) {
         <el-divider />
         <div class="flex justify-end mt-4">
           <DogeButton @click="changeUndo(true)">+ Add</DogeButton>
-          <DogeButton type="wran" @click="changeUndo(false)">- Reduce</DogeButton>
+          <DogeButton type="warn" @click="changeUndo(false)">- Reduce</DogeButton>
         </div>
         <div class="border border-solid border-gray-400 rounded-xl p-5 mt-5" style="min-height: 300px">
           <el-table :data="curTransferList">
@@ -166,21 +166,15 @@ function changeUndo(isAdd: boolean) {
             <SwapInput v-model="token.amountA" title="Add doge" name="pay" :price="0" swap-type="SWAP_A_B" v-if="isAToken">
               <template #right>
                 <div></div>
-                <!-- <div class="flex items-center py-2 px-4 rounded-3xl overflow-hidden bg-white border border-gray-400 border-solid">
-                  <img class="w-6 mr-2" style="border-radius: 50%" :src="icons.doge" alt="" />
-                  doge
-                </div> -->
               </template>
             </SwapInput>
             <SwapInput class="mt-4" disabled v-model="token.amountB" title="Add dogim" name="pay" :price="0" swap-type="SWAP_A_B" v-else>
               <template #right>
-                <div class="flex items-center text-lg px-3 py-1 rounded-xl text-white cursor-pointer" style="background-color: #ffa21e" @click="showSelectTokenDialog = true">
-                  Select<el-icon><CaretRight /></el-icon>
-                </div>
-                <!-- <div class="flex items-center py-2 px-4 rounded-3xl overflow-hidden bg-white border border-gray-400 border-solid">
-                  <img class="w-6 mr-2" style="border-radius: 50%" :src="icons.dogim" alt="" />
-                  dogim
-                </div> -->
+                <DogeButton type="warn" border-color="#fff" @click="showSelectTokenDialog = true">
+                  <div class="flex items-center text-sm">
+                    Select<el-icon><CaretRight /></el-icon>
+                  </div>
+                </DogeButton>
               </template>
             </SwapInput>
             <div class="swap-sub-btn swap-sub-btn--disabled mt-10">Add</div>
