@@ -16,7 +16,7 @@ const props = defineProps<{
   padding: 20px;
   border-radius: 8px;
   box-shadow: inset 0 -5px 0 0 rgba(0, 0, 0, 0.1);
-  border: 1px solid #000;
+  border: 1px solid $layout-border-color;
   background-color: #fff;
   @media screen and (max-width: 786px) {
     & {

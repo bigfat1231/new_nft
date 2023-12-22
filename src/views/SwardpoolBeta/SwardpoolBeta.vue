@@ -484,32 +484,4 @@ section {
     border: 1px solid #333;
   }
 }
-.dog-tabmenu {
-  margin-bottom: 20px;
-  &_item {
-    display: inline-block;
-    padding: 4px 10px 5px 8px;
-    border-radius: 8px;
-    box-shadow: inset 0 -4px 0 0 rgba(0, 0, 0, 0.1);
-    border: solid 1px #000;
-    background-color: #fafafa;
-    font-size: 14px;
-    margin-right: 12px;
-    cursor: pointer;
-    &:hover {
-      @extend .dog-tabmenu_item--active;
-    }
-    &--active {
-      background-color: #ddc2f9;
-    }
-    &:last-child {
-      margin-right: 0;
-    }
-    @media screen and (max-width: 430px) {
-      & {
-        font-size: 12px;
-      }
-    }
-  }
-}
 </style>

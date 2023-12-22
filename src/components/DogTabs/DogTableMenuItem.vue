@@ -29,7 +29,7 @@ const emit = defineEmits<{
     padding: 4px 10px 5px 8px;
     border-radius: 8px;
     box-shadow: inset 0 -4px 0 0 rgba(0, 0, 0, 0.1);
-    border: solid 1px #000;
+    border: solid 1px $btn-border-color;
     background-color: #fafafa;
     font-size: 14px;
     margin-right: 12px;

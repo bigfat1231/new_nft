@@ -102,6 +102,7 @@ const isDisabledPay = computed(() => isLimitAmount.value || payToken.value.amoun
 watch(visible, (isVisible) => {
   if (isVisible) {
     inputDialogWidth.value = Math.min(maxInputDialogWidth, window.screen.width - 20)
+    revToken.value.pools = props.pools
     // transNotifier.value = ElNotification({
     //   title: 'Transaction Reminder',
     //   message: `There may be differences in the current transaction amount.`,
@@ -124,16 +125,6 @@ watch(
   () => props.currentPoolState,
   () => {
     resetPoolState()
-  }
-)
-
-watch(
-  () => props.pools,
-  (pools) => {
-    revToken.value.pools = pools
-  },
-  {
-    immediate: true,
   }
 )
 

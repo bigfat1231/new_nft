@@ -52,33 +52,31 @@ watch(() => route.name, requestState, {
 })
 </script>
 <template>
-  <div id="container">
-    <DogNav></DogNav>
-    <main class="content" v-loading="!isShow">
-      <router-view v-slot="{ Component }" v-if="isShow">
-        <keep-alive :include="['home', 'swap', 'drc20']">
-          <component :is="Component" />
-        </keep-alive>
-      </router-view>
-    </main>
-    <footer id="footer">
-      <ul class="link-list">
-        <li class="link-list_item">
-          <a href="https://twitter.com/dogexprotocal" target="_blank" class="nft link-list_item_a">&#xe652;</a>
-        </li>
-        <li class="link-list_item">
-          <a href="https://github.com/dogexme" target="_blank" class="nft link-list_item_a">&#xe691;</a>
-        </li>
-        <!-- <li class="link-list_item">
+  <DogNav></DogNav>
+  <main class="content" v-loading="!isShow">
+    <router-view v-slot="{ Component }" v-if="isShow">
+      <keep-alive :include="['home', 'swap', 'drc20']">
+        <component :is="Component" />
+      </keep-alive>
+    </router-view>
+  </main>
+  <footer id="footer">
+    <ul class="link-list">
+      <li class="link-list_item">
+        <a href="https://twitter.com/dogexprotocal" target="_blank" class="nft link-list_item_a">&#xe652;</a>
+      </li>
+      <li class="link-list_item">
+        <a href="https://github.com/dogexme" target="_blank" class="nft link-list_item_a">&#xe691;</a>
+      </li>
+      <!-- <li class="link-list_item">
           <a href="https://discord.com/dpalwallet" target="_blank" class="nft link-list_item_a">&#xebf8;</a>
         </li> -->
-        <li class="link-list_item">
-          <a href="https://t.me/dpalwallet" target="_blank" class="nft link-list_item_a">&#xec25;</a>
-        </li>
-      </ul>
-      <span style="font-size: 16px; margin-top: 24px">Copyright © 2023 dogex.me</span>
-    </footer>
-  </div>
+      <li class="link-list_item">
+        <a href="https://t.me/dpalwallet" target="_blank" class="nft link-list_item_a">&#xec25;</a>
+      </li>
+    </ul>
+    <span class="text-xs mt-2">Copyright©2023 dogex.me</span>
+  </footer>
 </template>
 <style lang="scss">
 .content {
@@ -94,8 +92,7 @@ watch(() => route.name, requestState, {
   position: relative;
   display: flex;
   flex-direction: column;
-  height: 14.444444444444443vmin;
-  min-height: 116px;
+  height: 80px;
   border-top: 1px solid #333;
   justify-content: center;
   align-items: center;
@@ -106,7 +103,7 @@ watch(() => route.name, requestState, {
     display: inline-block;
     margin: 0 12px;
     &_a {
-      font-size: 18px !important;
+      font-size: 14px !important;
       color: #333 !important;
     }
   }

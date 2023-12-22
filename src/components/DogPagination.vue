@@ -109,7 +109,7 @@ function handlerJumpPage() {
     padding: 0 8px;
     border-radius: 8px;
     box-shadow: inset 0 -4px 0 0 rgba(0, 0, 0, 0.1);
-    border: solid 1px #000;
+    border: solid 1px $btn-border-color;
     background-color: #fafafa;
     font-size: 14px;
     cursor: pointer;

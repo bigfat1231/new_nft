@@ -142,8 +142,7 @@ function triggerDrawer(direction: DrawerDirection) {
   z-index: 2007;
   width: 100vw;
   background-color: #fff;
-  border-bottom: 1px solid #333;
-  box-shadow: inset 0 -4px 0 0 rgba(0, 0, 0, 0.1);
+  box-shadow: inset 0 -2px 0 0 rgba(0, 0, 0, 0.1);
 }
 .nav-logo {
   display: inline-block;
