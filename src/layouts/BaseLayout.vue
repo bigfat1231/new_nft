@@ -93,7 +93,7 @@ watch(() => route.name, requestState, {
   display: flex;
   flex-direction: column;
   height: 80px;
-  border-top: 1px solid #333;
+  border-top: 1px solid #dedede;
   justify-content: center;
   align-items: center;
   margin-top: 5.55vmin;

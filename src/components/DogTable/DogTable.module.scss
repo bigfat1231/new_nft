@@ -30,12 +30,14 @@ $border-color: #f5f5f5;
   font-weight: bold;
   height: 36px;
   vertical-align: top;
+  background-color: #fff9e0;
+  color: #333;
 }
 
 .dog-table-tb > .dog-table-tr {
   height: 60px;
   position: relative;
-
+  color: #333;
   .table-index {
     position: relative;
     overflow: hidden;
